@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.template.MainController">
    <children>
       <Pane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #20B2AA;">
@@ -63,13 +62,13 @@
                   <TextField fx:id="txtTipoProjeto" prefHeight="25.0" prefWidth="25.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                </children>
             </GridPane>
-            <TableView fx:id="tblFrameworks" layoutX="73.0" layoutY="214.0" prefHeight="166.0" prefWidth="454.0" style="-fx-border-width: 0;">
+            <TableView fx:id="tblFrameworks" layoutX="10.0" layoutY="220.0" onMouseClicked="#carregarCampos" prefHeight="166.0" prefWidth="580.0" style="-fx-border-width: 0;">
               <columns>
-                <TableColumn fx:id="colId" editable="false" prefWidth="75.0" style="-fx-background-color: #ADD8E6;" text="id" />
-                <TableColumn fx:id="colName" editable="false" prefWidth="75.0" style="-fx-background-color: #ADD8E6;" text="name" />
-                  <TableColumn fx:id="colTecnology" editable="false" prefWidth="75.0" style="-fx-background-color: #ADD8E6;" text="tecnology" />
-                  <TableColumn fx:id="colHighestVersion" editable="false" prefWidth="113.0" style="-fx-background-color: #ADD8E6;" text="highest version" />
-                  <TableColumn fx:id="colProjectType" editable="false" prefWidth="117.0" style="-fx-background-color: #ADD8E6;" text="project type" />
+                <TableColumn fx:id="colId" editable="false" prefWidth="92.0" style="-fx-background-color: #ADD8E6;" text="id" />
+                <TableColumn fx:id="colName" editable="false" prefWidth="129.0" style="-fx-background-color: #ADD8E6;" text="name" />
+                  <TableColumn fx:id="colTecnology" editable="false" prefWidth="136.0" style="-fx-background-color: #ADD8E6;" text="tecnology" />
+                  <TableColumn fx:id="colHighestVersion" editable="false" prefWidth="120.0" style="-fx-background-color: #ADD8E6;" text="highest version" />
+                  <TableColumn fx:id="colProjectType" editable="false" prefWidth="105.0" style="-fx-background-color: #ADD8E6;" text="project type" />
               </columns>
             </TableView>
             <Label layoutX="20.0" layoutY="14.0" style="-fx-font-size: 30;" text="CADASTRO DE FRAMEWORKS" textFill="WHITE" />
