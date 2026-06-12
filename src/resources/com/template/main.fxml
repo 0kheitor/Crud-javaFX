@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -14,9 +15,9 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.template.MainController">
    <children>
-      <Pane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #20B2AA;">
+      <Pane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #2E2E2E;">
          <children>
-            <GridPane alignment="CENTER_LEFT" layoutX="114.0" layoutY="61.0" prefHeight="141.0" prefWidth="277.0">
+            <GridPane alignment="CENTER_LEFT" layoutX="23.0" layoutY="62.0" prefHeight="141.0" prefWidth="277.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" prefWidth="160.0" />
@@ -62,21 +63,22 @@
                   <TextField fx:id="txtTipoProjeto" prefHeight="25.0" prefWidth="25.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                </children>
             </GridPane>
-            <TableView fx:id="tblFrameworks" layoutX="10.0" layoutY="220.0" onMouseClicked="#carregarCampos" prefHeight="166.0" prefWidth="580.0" style="-fx-border-width: 0;">
+            <TableView fx:id="tblFrameworks" layoutX="10.0" layoutY="245.0" onMouseClicked="#carregarCampos" prefHeight="141.0" prefWidth="582.0" style="-fx-border-width: 0;">
               <columns>
-                <TableColumn fx:id="colId" editable="false" prefWidth="92.0" style="-fx-background-color: #ADD8E6;" text="id" />
-                <TableColumn fx:id="colName" editable="false" prefWidth="129.0" style="-fx-background-color: #ADD8E6;" text="name" />
-                  <TableColumn fx:id="colTecnology" editable="false" prefWidth="136.0" style="-fx-background-color: #ADD8E6;" text="tecnology" />
-                  <TableColumn fx:id="colHighestVersion" editable="false" prefWidth="120.0" style="-fx-background-color: #ADD8E6;" text="highest version" />
-                  <TableColumn fx:id="colProjectType" editable="false" prefWidth="105.0" style="-fx-background-color: #ADD8E6;" text="project type" />
+                <TableColumn fx:id="colId" editable="false" prefWidth="92.0" style="-fx-background-color: #FFFFFF;" text="id" />
+                <TableColumn fx:id="colName" editable="false" prefWidth="129.0" style="-fx-background-color: #FFFFFF;" text="name" />
+                  <TableColumn fx:id="colTecnology" editable="false" prefWidth="125.0" style="-fx-background-color: #FFFFFF;" text="tecnology" />
+                  <TableColumn fx:id="colHighestVersion" editable="false" prefWidth="131.0" style="-fx-background-color: FFFFFF;" text="highest version" />
+                  <TableColumn fx:id="colProjectType" editable="false" prefWidth="104.0" style="-fx-background-color: FFFFFF;" text="project type" />
               </columns>
             </TableView>
             <Label layoutX="20.0" layoutY="14.0" style="-fx-font-size: 30;" text="CADASTRO DE FRAMEWORKS" textFill="WHITE" />
             <Label layoutX="34.0" layoutY="249.0" />
-            <Button fx:id="btnLimpar" layoutX="419.0" layoutY="132.0" mnemonicParsing="false" onAction="#btnLimparAction" prefHeight="25.0" prefWidth="53.0" style="-fx-background-color: #DC143C;" text="limpar" textFill="WHITE" />
-            <Button fx:id="btnAtualizar" layoutX="419.0" layoutY="96.0" mnemonicParsing="false" onAction="#btnAtualizarAction" prefHeight="25.0" prefWidth="53.0" style="-fx-background-color: #1E90FF;" text="editar" textFill="WHITE" />
-            <Button fx:id="btnDeletar" layoutX="419.0" layoutY="169.0" mnemonicParsing="false" onAction="#btnDeletarAction" style="-fx-background-color: #FF8C00;" text="deletar" textFill="WHITE" />
-            <Button fx:id="btnSalvar" layoutX="419.0" layoutY="61.0" mnemonicParsing="false" onAction="#btnSalvarAction" prefHeight="25.0" prefWidth="53.0" style="-fx-background-color: #2F4F4F;" text="Salvar" textFill="WHITE" />
+            <Button fx:id="btnLimpar" layoutX="317.0" layoutY="139.0" mnemonicParsing="false" onAction="#btnLimparAction" prefHeight="25.0" prefWidth="53.0" style="-fx-background-color: #DC143C;" text="limpar" textFill="WHITE" />
+            <Button fx:id="btnAtualizar" layoutX="317.0" layoutY="99.0" mnemonicParsing="false" onAction="#btnAtualizarAction" prefHeight="25.0" prefWidth="53.0" style="-fx-background-color: #1E90FF;" text="editar" textFill="WHITE" />
+            <Button fx:id="btnDeletar" layoutX="317.0" layoutY="178.0" mnemonicParsing="false" onAction="#btnDeletarAction" style="-fx-background-color: #FF8C00;" text="deletar" textFill="WHITE" />
+            <Button fx:id="btnSalvar" layoutX="317.0" layoutY="62.0" mnemonicParsing="false" onAction="#btnSalvarAction" prefHeight="25.0" prefWidth="53.0" style="-fx-background-color: #2F4F4F;" text="Salvar" textFill="WHITE" />
+            <TextArea fx:id="txtArea" editable="false" layoutX="386.0" layoutY="62.0" prefHeight="141.0" prefWidth="200.0" text="LOGS" />
          </children>
       </Pane>
    </children>

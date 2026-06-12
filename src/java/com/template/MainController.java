@@ -2,16 +2,14 @@ package com.template;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import com.template.FrameworkDAO;
 import com.template.FrameworkDTO;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.event.ActionEvent;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class MainController
 {
@@ -19,7 +17,7 @@ public class MainController
     @FXML private Button btnSalvar;
     @FXML private Button btnDeletar;
     @FXML private Button btnLimpar;
-    @FXML private Button btnEditar;
+    @FXML private Button btnAtualizar;
     @FXML private TextField txtNome;
     @FXML private TextField txtTecnologia;
     @FXML private TextField txtTipoProjeto;
@@ -31,6 +29,7 @@ public class MainController
     @FXML private TableColumn<FrameworkDTO, String>  colTecnology;
     @FXML private TableColumn<FrameworkDTO, String>  colHighestVersion;
     @FXML private TableColumn<FrameworkDTO, String>  colProjectType;
+    @FXML private TextArea txtArea;
 
     private FrameworkDTO getDTO(){
         int id = Integer.parseInt(txtID.getText());
@@ -49,14 +48,72 @@ public class MainController
         return dto;
     }
 
+    private void logInfo(String message){
+        txtArea.appendText( '\n' + message);
+    }
+
+    private void setButtonsStatus(Boolean off){
+        //.setDisable(disableDelete); //o delete só depende do ID
+        btnAtualizar.setDisable(off);
+        btnSalvar.setDisable(off);
+    }
+
+    private boolean isAnyFieldEmpty(){
+        boolean nameField = txtNome.getText().trim().isEmpty();
+        boolean iddField = txtID.getText().trim().isEmpty();
+        boolean highestVersionField = txtMaiorVersao.getText().trim().isEmpty();
+        boolean projectTypeField = txtTipoProjeto.getText().trim().isEmpty();
+        boolean tecnologyField = txtTecnologia.getText().trim().isEmpty();
+
+        return nameField || iddField || highestVersionField || projectTypeField || tecnologyField;
+    }
+
     @FXML
     private void initialize()
     {
+        setButtonsStatus(true);
+        btnDeletar.setDisable(true);
+        logInfo("<APLICATION>: INITIALIZED.");
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colTecnology.setCellValueFactory(new PropertyValueFactory<>("tecnology"));
         colHighestVersion.setCellValueFactory(new PropertyValueFactory<>("projectType"));
         colProjectType.setCellValueFactory(new PropertyValueFactory<>("highestVersion"));
+
+        txtID.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null || newValue.trim().isEmpty()) {
+                setButtonsStatus(true);
+                btnDeletar.setDisable(true);
+            } else {
+                btnDeletar.setDisable(false);
+                if(!isAnyFieldEmpty()) setButtonsStatus(false);
+            }
+        });
+
+        txtNome.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null || newValue.trim().isEmpty()) {
+                setButtonsStatus(true);
+            } else if(!isAnyFieldEmpty()) setButtonsStatus(false);
+        });
+
+        txtMaiorVersao.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null || newValue.trim().isEmpty()) {
+                setButtonsStatus(true);
+            } else if(!isAnyFieldEmpty()) setButtonsStatus(false);
+        });
+
+        txtTecnologia.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null || newValue.trim().isEmpty()) {
+                setButtonsStatus(true);
+            } else if(!isAnyFieldEmpty()) setButtonsStatus(false);
+        });
+
+        txtTipoProjeto.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null || newValue.trim().isEmpty()) {
+                setButtonsStatus(true);
+            } else if(!isAnyFieldEmpty()) setButtonsStatus(false);
+        });
+
         carregarFrameworks();
     }
 
@@ -64,17 +121,23 @@ public class MainController
     private void btnSalvarAction(ActionEvent event){
         FrameworkDTO dto = getDTO();
         FrameworkDAO dao = new FrameworkDAO();
+        logInfo("<CREATE> CREATED" + dto.getId());
         dao.postFramework(dto);
         carregarFrameworks();
     }
 
-    @FXML
-    private void btnLimparAction(ActionEvent event){
+    private void ClearAction(){
         txtID.clear();
         txtNome.clear();
         txtMaiorVersao.clear();
         txtTipoProjeto.clear();
         txtTecnologia.clear();
+        setButtonsStatus(true);
+    }
+
+    @FXML
+    private void btnLimparAction(ActionEvent event){
+        ClearAction();
     }
 
     @FXML
@@ -82,15 +145,31 @@ public class MainController
         FrameworkDTO dto = getDTO();
         FrameworkDAO dao = new FrameworkDAO();
         dao.updateFramework(dto);
+        logInfo("<UPDATE> UPDATE ON " + dto.getId());
         carregarFrameworks();
+        ClearAction();
     }
 
     @FXML
     private void btnDeletarAction(){
         int id = Integer.parseInt(txtID.getText());
+
+        logInfo("<DELETE_TRY> ON " + id);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("DELETE CONFIRMATION");
+        alert.setHeaderText("Você está prestes a excluir um registro.");
+        alert.setContentText("Tem certeza que deseja realizar esta ação? Esta operação não pode ser desfeita.");
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if(result.isPresent() && result.get() == ButtonType.OK){
+            logInfo("<DELETE_CONFIRMATION> ON " + id);
+        }else return;
+
         FrameworkDAO dao = new FrameworkDAO();
         dao.deleteFramework(id);
         carregarFrameworks();
+        ClearAction();
     }
 
     @FXML
@@ -98,6 +177,7 @@ public class MainController
         FrameworkDAO dao = new FrameworkDAO();
         ArrayList<FrameworkDTO> list = dao.getAllFrameworks();
         tblFrameworks.setItems(FXCollections.observableArrayList(list));
+
     }
 
     @FXML
