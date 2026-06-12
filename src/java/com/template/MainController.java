@@ -71,6 +71,7 @@ public class MainController
     @FXML
     private void initialize()
     {
+
         setButtonsStatus(true);
         btnDeletar.setDisable(true);
         logInfo("<APLICATION>: INITIALIZED.");
