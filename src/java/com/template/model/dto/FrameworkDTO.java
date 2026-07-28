@@ -1,6 +1,4 @@
-package com.template;
-
-import java.util.Scanner;
+package com.template.model.dto;
 
 public class FrameworkDTO {
 

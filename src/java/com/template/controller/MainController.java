@@ -1,22 +1,21 @@
-package com.template;
+package com.template.controller;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import com.template.FrameworkDAO;
-import com.template.FrameworkDTO;
+import com.template.model.dao.FrameworkDAO;
+import com.template.model.dto.FrameworkDTO;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.event.ActionEvent;
 
 import java.util.ArrayList;
-import java.util.Optional;
+import com.template.util.DialogUtil;
 
 public class MainController
 {
 
     @FXML private Button btnSalvar;
     @FXML private Button btnDeletar;
-    @FXML private Button btnLimpar;
     @FXML private Button btnAtualizar;
     @FXML private TextField txtNome;
     @FXML private TextField txtTecnologia;
@@ -38,14 +37,14 @@ public class MainController
         String project_type = txtTipoProjeto.getText();
         String tecnology = txtTecnologia.getText();
 
-        FrameworkDTO dto = new FrameworkDTO();
-        dto.setId(id);
-        dto.setProjectType(project_type);
-        dto.setName(name);
-        dto.setHighestVersion(highest_version);
-        dto.setTecnology(tecnology);
+        FrameworkDTO frameworkDTO = new FrameworkDTO();
+        frameworkDTO.setId(id);
+        frameworkDTO.setProjectType(project_type);
+        frameworkDTO.setName(name);
+        frameworkDTO.setHighestVersion(highest_version);
+        frameworkDTO.setTecnology(tecnology);
 
-        return dto;
+        return frameworkDTO;
     }
 
     private void logInfo(String message){
@@ -120,10 +119,10 @@ public class MainController
 
     @FXML
     private void btnSalvarAction(ActionEvent event){
-        FrameworkDTO dto = getDTO();
-        FrameworkDAO dao = new FrameworkDAO();
-        logInfo("<CREATE> CREATED" + dto.getId());
-        dao.postFramework(dto);
+        FrameworkDTO frameworkDTO = getDTO();
+        FrameworkDAO frameworkDAO = new FrameworkDAO();
+        logInfo("<CREATE> CREATED ID " + frameworkDTO.getId());
+        frameworkDAO.postFramework(frameworkDTO);
         carregarFrameworks();
     }
 
@@ -143,10 +142,10 @@ public class MainController
 
     @FXML
     private void btnAtualizarAction(){
-        FrameworkDTO dto = getDTO();
-        FrameworkDAO dao = new FrameworkDAO();
-        dao.updateFramework(dto);
-        logInfo("<UPDATE> UPDATE ON " + dto.getId());
+        FrameworkDTO frameworkDTO = getDTO();
+        FrameworkDAO frameworkDAO = new FrameworkDAO();
+        frameworkDAO.updateFramework(frameworkDTO);
+        logInfo("<UPDATE> UPDATE ON ID " + frameworkDTO.getId());
         carregarFrameworks();
         ClearAction();
     }
@@ -155,42 +154,36 @@ public class MainController
     private void btnDeletarAction(){
         int id = Integer.parseInt(txtID.getText());
 
-        logInfo("<DELETE_TRY> ON " + id);
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("DELETE CONFIRMATION");
-        alert.setHeaderText("Você está prestes a excluir um registro.");
-        alert.setContentText("Tem certeza que deseja realizar esta ação? Esta operação não pode ser desfeita.");
+        logInfo("<DELETE_TRY> ON ID " + id);
 
-        Optional<ButtonType> result = alert.showAndWait();
-
-        if(result.isPresent() && result.get() == ButtonType.OK){
-            logInfo("<DELETE_CONFIRMATION> ON " + id);
+        if(DialogUtil.showConfirmation("Tem certeza que deseja realizar esta ação? Esta operação não pode ser desfeita.")){
+            logInfo("<DELETE_CONFIRMATION> ON ID " + id);
         }else return;
 
-        FrameworkDAO dao = new FrameworkDAO();
-        dao.deleteFramework(id);
+        FrameworkDAO frameworkDAO = new FrameworkDAO();
+        frameworkDAO.deleteFramework(id);
         carregarFrameworks();
         ClearAction();
     }
 
     @FXML
     private void carregarFrameworks(){
-        FrameworkDAO dao = new FrameworkDAO();
-        ArrayList<FrameworkDTO> list = dao.getAllFrameworks();
-        tblFrameworks.setItems(FXCollections.observableArrayList(list));
+        FrameworkDAO frameworkDAO = new FrameworkDAO();
+        ArrayList<FrameworkDTO> frameworksList = frameworkDAO.getAllFrameworks();
+        tblFrameworks.setItems(FXCollections.observableArrayList(frameworksList));
 
     }
 
     @FXML
     private void carregarCampos(){
         //SelectModel é a representação interna tabela
-        FrameworkDTO dto = tblFrameworks.getSelectionModel().getSelectedItem();
-        if(dto != null){
-            txtID.setText(String.valueOf(dto.getId()));
-            txtNome.setText(dto.getName());
-            txtMaiorVersao.setText(dto.getHighestVersion());
-            txtTecnologia.setText(dto.getTecnology());
-            txtTipoProjeto.setText(dto.getProjectType());
+        FrameworkDTO frameworkDTO = tblFrameworks.getSelectionModel().getSelectedItem();
+        if(frameworkDTO != null){
+            txtID.setText(String.valueOf(frameworkDTO.getId()));
+            txtNome.setText(frameworkDTO.getName());
+            txtMaiorVersao.setText(frameworkDTO.getHighestVersion());
+            txtTecnologia.setText(frameworkDTO.getTecnology());
+            txtTipoProjeto.setText(frameworkDTO.getProjectType());
         }
     }
 }

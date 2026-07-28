@@ -1,8 +1,10 @@
-package com.template;
+package com.template.model.dao;
+
+import com.template.model.Conexao;
+import com.template.model.dto.FrameworkDTO;
+import com.template.util.DialogUtil;
 
 import java.sql.*;
-import com.template.FrameworkDTO;
-import com.template.Conexao;
 
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -43,7 +45,8 @@ public class FrameworkDAO {
             }
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "<ERROR> erro ao listar os usuários", e);
+            logger.log(Level.SEVERE, "<ERROR> ERRO AO LISAR OS USUÁRIOS", e);
+            DialogUtil.showError("erro ao listar os usuários");
         }
 
         return list;
@@ -66,12 +69,15 @@ public class FrameworkDAO {
 
             if (result == 1) {
                 logger.log(Level.FINE, "<POST> SUCCESSO, " + result + " DADO(S) INSERIDO(S)");
+                DialogUtil.showInformation("Sucesso, " + result + " dado(s) inseridos(s)");
             } else {
                 logger.log(Level.FINE, "<POST> FALHA, NENHUM DADO FOI INSERIDO");
+                DialogUtil.showWarning("Falha, nenhum dado foi inserido");
             }
 
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "<ERROR> " + e.getMessage(), e);
+            DialogUtil.showError("Erro interno do BD");
         }
 
     }
@@ -87,12 +93,15 @@ public class FrameworkDAO {
 
             if (result == 1) {
                 logger.log(Level.FINE, "<DELETE> SUCCESSO, " + result + " DADO(S) DELETADO(S)");
+                DialogUtil.showInformation("Sucesso, " + result + " dado(s) deletados(s)");
             } else {
                 logger.log(Level.WARNING, "<DELETE> FALHA, NENHUM DADO FOI DELETADO");
+                DialogUtil.showWarning("Falha, nenhum dado foi deletado");
             }
 
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "<ERROR> " + e.getMessage(), e);
+            DialogUtil.showError("Erro interno do BD");
         }
 
     }
@@ -112,12 +121,15 @@ public class FrameworkDAO {
 
             if (result == 1) {
                 logger.log(Level.FINE, "<UPDATE> SUCCESSO, " + result + " DADO(S) ATUALIZADO(S)");
+                DialogUtil.showInformation("Sucesso, " + result + " dado(s) editados(s)");
             } else {
                 logger.log(Level.WARNING, "<UPDATE> FALHA, NENHUM DADO FOI ATUALIZADO");
+                DialogUtil.showWarning("Falha, nenhum dado foi editado");
             }
 
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "<ERROR> " + e.getMessage(), e);
+            DialogUtil.showError("Erro interno do BD");
         }
 
     }
