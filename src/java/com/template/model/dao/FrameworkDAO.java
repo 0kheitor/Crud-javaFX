@@ -19,6 +19,7 @@ public class FrameworkDAO {
      * DADOS A FUNCIONALIDADE DE RETORNAR OS DTO's FICARIA A CARGO DE
      * getFramework e getAllFrameworks (teoricamente)
      */
+
     public ArrayList<FrameworkDTO> getAllFrameworks() {
         ArrayList<FrameworkDTO> list = new ArrayList<>();
         //FUNCAO DQL DE VISUALIZAR (R DO CRUD)

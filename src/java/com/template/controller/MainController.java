@@ -63,7 +63,6 @@ public class MainController
         boolean highestVersionField = txtMaiorVersao.getText().trim().isEmpty();
         boolean projectTypeField = txtTipoProjeto.getText().trim().isEmpty();
         boolean tecnologyField = txtTecnologia.getText().trim().isEmpty();
-
         return nameField || iddField || highestVersionField || projectTypeField || tecnologyField;
     }
 
@@ -119,6 +118,8 @@ public class MainController
 
     @FXML
     private void btnSalvarAction(ActionEvent event){
+
+
         FrameworkDTO frameworkDTO = getDTO();
         FrameworkDAO frameworkDAO = new FrameworkDAO();
         logInfo("<CREATE> CREATED ID " + frameworkDTO.getId());
