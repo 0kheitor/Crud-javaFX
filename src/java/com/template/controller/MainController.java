@@ -1,5 +1,7 @@
 package com.template.controller;
 
+import com.template.service.FrameworkService;
+import com.template.validator.FrameworkValidator;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -30,6 +32,18 @@ public class MainController
     @FXML private TableColumn<FrameworkDTO, String>  colProjectType;
     @FXML private TextArea txtArea;
 
+    //SERVICE
+    private FrameworkService service = new FrameworkService();
+
+    //SUPPORT FUNCTIONS ******
+    private void updateButtonsStatus() {
+        boolean hasEmptyField = isAnyFieldEmpty();
+        boolean validId = FrameworkValidator.isValidId(txtID.getText());
+
+        setButtonsStatus(hasEmptyField || !validId);
+        btnDeletar.setDisable(!validId);
+    }
+
     private FrameworkDTO getDTO(){
         int id = Integer.parseInt(txtID.getText());
         String name = txtNome.getText();
@@ -51,6 +65,9 @@ public class MainController
         txtArea.appendText( '\n' + message);
     }
 
+    // ******
+
+    //BUTTON CONTROL FUNCTIONS ******
     private void setButtonsStatus(Boolean off){
         //.setDisable(disableDelete); //o delete só depende do ID
         btnAtualizar.setDisable(off);
@@ -59,72 +76,10 @@ public class MainController
 
     private boolean isAnyFieldEmpty(){
         boolean nameField = txtNome.getText().trim().isEmpty();
-        boolean iddField = txtID.getText().trim().isEmpty();
         boolean highestVersionField = txtMaiorVersao.getText().trim().isEmpty();
         boolean projectTypeField = txtTipoProjeto.getText().trim().isEmpty();
         boolean tecnologyField = txtTecnologia.getText().trim().isEmpty();
-        return nameField || iddField || highestVersionField || projectTypeField || tecnologyField;
-    }
-
-    @FXML
-    private void initialize()
-    {
-
-        setButtonsStatus(true);
-        btnDeletar.setDisable(true);
-        logInfo("<APLICATION>: INITIALIZED.");
-        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        colTecnology.setCellValueFactory(new PropertyValueFactory<>("tecnology"));
-        colHighestVersion.setCellValueFactory(new PropertyValueFactory<>("projectType"));
-        colProjectType.setCellValueFactory(new PropertyValueFactory<>("highestVersion"));
-
-        txtID.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null || newValue.trim().isEmpty()) {
-                setButtonsStatus(true);
-                btnDeletar.setDisable(true);
-            } else {
-                btnDeletar.setDisable(false);
-                if(!isAnyFieldEmpty()) setButtonsStatus(false);
-            }
-        });
-
-        txtNome.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null || newValue.trim().isEmpty()) {
-                setButtonsStatus(true);
-            } else if(!isAnyFieldEmpty()) setButtonsStatus(false);
-        });
-
-        txtMaiorVersao.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null || newValue.trim().isEmpty()) {
-                setButtonsStatus(true);
-            } else if(!isAnyFieldEmpty()) setButtonsStatus(false);
-        });
-
-        txtTecnologia.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null || newValue.trim().isEmpty()) {
-                setButtonsStatus(true);
-            } else if(!isAnyFieldEmpty()) setButtonsStatus(false);
-        });
-
-        txtTipoProjeto.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null || newValue.trim().isEmpty()) {
-                setButtonsStatus(true);
-            } else if(!isAnyFieldEmpty()) setButtonsStatus(false);
-        });
-
-        carregarFrameworks();
-    }
-
-    @FXML
-    private void btnSalvarAction(ActionEvent event){
-
-
-        FrameworkDTO frameworkDTO = getDTO();
-        FrameworkDAO frameworkDAO = new FrameworkDAO();
-        logInfo("<CREATE> CREATED ID " + frameworkDTO.getId());
-        frameworkDAO.postFramework(frameworkDTO);
-        carregarFrameworks();
+        return nameField || highestVersionField || projectTypeField || tecnologyField;
     }
 
     private void ClearAction(){
@@ -136,6 +91,37 @@ public class MainController
         setButtonsStatus(true);
     }
 
+    //******
+
+    @FXML
+    private void initialize()
+    {
+        setButtonsStatus(true);
+        btnDeletar.setDisable(true);
+        logInfo("<APLICATION>: INITIALIZED.");
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colTecnology.setCellValueFactory(new PropertyValueFactory<>("tecnology"));
+        colHighestVersion.setCellValueFactory(new PropertyValueFactory<>("highestVersion"));
+        colProjectType.setCellValueFactory(new PropertyValueFactory<>("projectType"));
+
+        txtID.textProperty().addListener((observable, oldValue, newValue) -> updateButtonsStatus());
+
+        txtNome.textProperty().addListener((observable, oldValue, newValue) -> updateButtonsStatus());
+        txtMaiorVersao.textProperty().addListener((observable, oldValue, newValue) -> updateButtonsStatus());
+        txtTecnologia.textProperty().addListener((observable, oldValue, newValue) -> updateButtonsStatus());
+        txtTipoProjeto.textProperty().addListener((observable, oldValue, newValue) -> updateButtonsStatus());
+        carregarFrameworks();
+    }
+
+    @FXML
+    private void btnSalvarAction(ActionEvent event){
+        FrameworkDTO frameworkDTO = getDTO();
+        logInfo("<CREATE> CREATED ID " + frameworkDTO.getId());
+        service.save(frameworkDTO);
+        carregarFrameworks();
+    }
+
     @FXML
     private void btnLimparAction(ActionEvent event){
         ClearAction();
@@ -144,8 +130,7 @@ public class MainController
     @FXML
     private void btnAtualizarAction(){
         FrameworkDTO frameworkDTO = getDTO();
-        FrameworkDAO frameworkDAO = new FrameworkDAO();
-        frameworkDAO.updateFramework(frameworkDTO);
+        service.update(frameworkDTO);
         logInfo("<UPDATE> UPDATE ON ID " + frameworkDTO.getId());
         carregarFrameworks();
         ClearAction();
@@ -161,16 +146,14 @@ public class MainController
             logInfo("<DELETE_CONFIRMATION> ON ID " + id);
         }else return;
 
-        FrameworkDAO frameworkDAO = new FrameworkDAO();
-        frameworkDAO.deleteFramework(id);
+        service.delete(id);
         carregarFrameworks();
         ClearAction();
     }
 
     @FXML
     private void carregarFrameworks(){
-        FrameworkDAO frameworkDAO = new FrameworkDAO();
-        ArrayList<FrameworkDTO> frameworksList = frameworkDAO.getAllFrameworks();
+        ArrayList<FrameworkDTO> frameworksList = service.getAll();
         tblFrameworks.setItems(FXCollections.observableArrayList(frameworksList));
 
     }

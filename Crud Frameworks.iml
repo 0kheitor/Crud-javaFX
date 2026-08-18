@@ -8,8 +8,7 @@
     </content>
     <orderEntry type="jdk" jdkName="25" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="lib" level="application" />
     <orderEntry type="library" exported="" name="postgresql-42.7.11" level="project" />
-    <orderEntry type="library" exported="" name="javafx-sdk-26.0" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>

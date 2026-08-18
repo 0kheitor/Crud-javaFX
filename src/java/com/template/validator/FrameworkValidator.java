@@ -11,7 +11,16 @@ public class FrameworkValidator {
         return true;
     }
 
-    public static boolean validateTerm(){
-        return true; //
+    public static boolean isValidId(String id) {
+        if (id.isEmpty()) {
+            return false;
+        }
+
+        try {
+            int value = Integer.parseInt(id);
+            return value > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }
