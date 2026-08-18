@@ -106,7 +106,6 @@ public class MainController
         colProjectType.setCellValueFactory(new PropertyValueFactory<>("projectType"));
 
         txtID.textProperty().addListener((observable, oldValue, newValue) -> updateButtonsStatus());
-
         txtNome.textProperty().addListener((observable, oldValue, newValue) -> updateButtonsStatus());
         txtMaiorVersao.textProperty().addListener((observable, oldValue, newValue) -> updateButtonsStatus());
         txtTecnologia.textProperty().addListener((observable, oldValue, newValue) -> updateButtonsStatus());

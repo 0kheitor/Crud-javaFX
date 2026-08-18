@@ -15,7 +15,6 @@ public class FrameworkValidator {
         if (id.isEmpty()) {
             return false;
         }
-
         try {
             int value = Integer.parseInt(id);
             return value > 0;
