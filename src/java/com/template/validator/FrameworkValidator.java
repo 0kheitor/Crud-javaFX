@@ -1,12 +1,31 @@
 package com.template.validator;
 
+import com.template.model.dto.FrameworkDTO;
 import com.template.util.DialogUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FrameworkValidator {
-    public static boolean validateFramework(String name, String tecnology, String highestVersion, String projectType){
-        if(name.isEmpty() || tecnology.isEmpty() || highestVersion.isEmpty() || projectType.isEmpty()){
-            DialogUtil.showWarning("Some field is empty.");
-            return false;
+    public static boolean validateFramework(FrameworkDTO frameworkDTO){
+
+        String name = frameworkDTO.getName();
+        String tecnology = frameworkDTO.getTecnology();
+        String highestVersion = frameworkDTO.getHighestVersion();
+        String projectType = frameworkDTO.getProjectType();
+
+        List<Validator<String>> validators = new ArrayList<>();
+        validators.add(new MandatoryFieldValidator("name",name));
+        validators.add(new MandatoryFieldValidator("tecnology",tecnology));
+        validators.add(new MandatoryFieldValidator("highestVersion",highestVersion));
+        validators.add(new MandatoryFieldValidator("projectType", projectType));
+        validators.add(new ProjectTypeValidator(projectType));
+
+        for(Validator<String> validator: validators){
+            if(!validator.validate()){
+                DialogUtil.showWarning(validator.getMessageError());
+                return false;
+            }
         }
         return true;
     }

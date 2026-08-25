@@ -10,7 +10,7 @@ public class ProjectTypeValidator implements Validator<String>{
 
     @Override
     public boolean validate() {
-        return projectType.matches(EXP);
+        return !projectType.matches(EXP);
     }
 
     @Override

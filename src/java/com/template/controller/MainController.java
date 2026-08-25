@@ -2,6 +2,7 @@ package com.template.controller;
 
 import com.template.service.FrameworkService;
 import com.template.validator.FrameworkValidator;
+import com.template.validator.Validator;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -115,7 +116,9 @@ public class MainController
 
     @FXML
     private void btnSalvarAction(ActionEvent event){
+        if(!FrameworkValidator.isValidId(txtID.getText())) return;
         FrameworkDTO frameworkDTO = getDTO();
+        if(!FrameworkValidator.validateFramework(frameworkDTO)) return;
         logInfo("<CREATE> CREATED ID " + frameworkDTO.getId());
         service.save(frameworkDTO);
         carregarFrameworks();
@@ -128,7 +131,9 @@ public class MainController
 
     @FXML
     private void btnAtualizarAction(){
+        if(!FrameworkValidator.isValidId(txtID.getText())) return;
         FrameworkDTO frameworkDTO = getDTO();
+        if(!FrameworkValidator.validateFramework(frameworkDTO)) return;
         service.update(frameworkDTO);
         logInfo("<UPDATE> UPDATE ON ID " + frameworkDTO.getId());
         carregarFrameworks();
@@ -137,7 +142,13 @@ public class MainController
 
     @FXML
     private void btnDeletarAction(){
-        int id = Integer.parseInt(txtID.getText());
+        String idBrute = txtID.getText();
+        if(!FrameworkValidator.isValidId(idBrute)) {
+            DialogUtil.showWarning("invalid id");
+            return;
+        }
+        int id = Integer.parseInt(idBrute);
+
 
         logInfo("<DELETE_TRY> ON ID " + id);
 
